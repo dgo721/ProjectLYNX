@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1396367872 source:c:\users\diego\documents\codeblocks\projectlynx\main.cpp
+	<windows.h>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<mmsystem.h>
+	<GLUT/glut.h>
+	<GL/glut.h>
+
+976688572 c:\users\diego\documents\others\glut\include\gl\glut.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
