@@ -188,11 +188,14 @@ void levelOne(){
 
 void levelTwo(){
     float tx=-1.25;
+    fline=-.8;
+    angle=25;
 
     //First Row
     for (int i=0; i<6; i++){
         glPushMatrix();
-        glTranslatef(tx,.3,-.8);
+        glTranslatef(tx,.3,fline);
+        glRotatef(angle, 0, 1, 0);
         coloreaCubo(1);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
@@ -200,14 +203,24 @@ void levelTwo(){
         glPopMatrix();
 
         tx+=0.5;
+        if (i<2){
+            fline-=.025;
+            angle-=12.5;
+        }
+        else if (i>3){
+            fline+=.025;
+            angle-=12.5;
+        }
     }
 
     tx=-1.25;
-
+    fline=-.8;
+    angle=25;
     //Second Row
     for (int i=0; i<6; i++){
         glPushMatrix();
-        glTranslatef(tx,-.15,-.8);
+        glTranslatef(tx,-.15,fline);
+        glRotatef(angle, 0, 1, 0);
         coloreaCubo(2);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
@@ -215,14 +228,24 @@ void levelTwo(){
         glPopMatrix();
 
         tx+=0.5;
+        if (i<2){
+            fline-=.025;
+            angle-=12.5;
+        }
+        else if (i>3){
+            fline+=.025;
+            angle-=12.5;
+        }
     }
 
     tx=-1.25;
-
+    fline=-.8;
+    angle=25;
     //Third Row
     for (int i=0; i<6; i++){
         glPushMatrix();
-        glTranslatef(tx,-.6,-.8);
+        glTranslatef(tx,-.6,fline);
+        glRotatef(angle, 0, 1, 0);
         coloreaCubo(3);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
@@ -230,14 +253,25 @@ void levelTwo(){
         glPopMatrix();
 
         tx+=0.5;
+        if (i<2){
+            fline-=.025;
+            angle-=12.5;
+        }
+        else if (i>3){
+            fline+=.025;
+            angle-=12.5;
+        }
     }
 
     tx=-1.25;
-
+    fline=-.8;
+    angle=25;
     //Forth Row
     for (int i=0; i<6; i++){
         glPushMatrix();
-        glTranslatef(tx,-1.15,-.8);
+        glTranslatef(tx,-1.15,fline);
+        glRotatef(angle, 0, 1, 0);
+        glRotatef(-15, 1, 0, 0);
         coloreaCubo(1);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
@@ -245,16 +279,27 @@ void levelTwo(){
         glPopMatrix();
 
         tx+=0.5;
+        if (i<2){
+            fline-=.025;
+            angle-=12.5;
+        }
+        else if (i>3){
+            fline+=.025;
+            angle-=12.5;
+        }
     }
 }
 
 void levelThree(){
     float tx=-1.4;
+    fline=-.8;
+    angle=25;
 
     //First Row
     for (int i=0; i<8; i++){
         glPushMatrix();
-        glTranslatef(tx,.3,-.8);
+        glTranslatef(tx,.3,fline);
+        glRotatef(angle, 0, 1, 0);
         coloreaCubo(1);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
@@ -262,14 +307,24 @@ void levelThree(){
         glPopMatrix();
 
         tx+=0.4;
+        if (i<3){
+            fline-=.025;
+            angle-=(25/3);
+        }
+        else if (i>4){
+            fline+=.025;
+            angle-=(25/3);
+        }
     }
 
     tx=-1.4;
-
+    fline=-.8;
+    angle=25;
     //Second Row
     for (int i=0; i<8; i++){
         glPushMatrix();
-        glTranslatef(tx,-0.1,-.8);
+        glTranslatef(tx,-0.1,fline);
+        glRotatef(angle, 0, 1, 0);
         coloreaCubo(2);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
@@ -277,14 +332,25 @@ void levelThree(){
         glPopMatrix();
 
         tx+=0.4;
+        if (i<3){
+            fline-=.025;
+            angle-=(25/3);
+        }
+        else if (i>4){
+            fline+=.025;
+            angle-=(25/3);
+        }
     }
 
     tx=-1.4;
+    fline=-.8;
+    angle=25;
 
     //Third Row
     for (int i=0; i<8; i++){
         glPushMatrix();
-        glTranslatef(tx,-0.5,-.8);
+        glTranslatef(tx,-0.5,fline);
+        glRotatef(angle, 0, 1, 0);
         coloreaCubo(3);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
@@ -292,14 +358,25 @@ void levelThree(){
         glPopMatrix();
 
         tx+=0.4;
+        if (i<3){
+            fline-=.025;
+            angle-=(25/3);
+        }
+        else if (i>4){
+            fline+=.025;
+            angle-=(25/3);
+        }
     }
 
     tx=-1.4;
-
+    fline=-.8;
+    angle=25;
     //Forth Row
     for (int i=0; i<8; i++){
         glPushMatrix();
-        glTranslatef(tx,-0.9,-.8);
+        glTranslatef(tx,-0.9,fline);
+        glRotatef(angle, 0, 1, 0);
+        glRotatef(-10, 1, 0, 0);
         coloreaCubo(1);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
@@ -307,14 +384,25 @@ void levelThree(){
         glPopMatrix();
 
         tx+=0.4;
+        if (i<3){
+            fline-=.025;
+            angle-=(25/3);
+        }
+        else if (i>4){
+            fline+=.025;
+            angle-=(25/3);
+        }
     }
 
     tx=-1.4;
-
+    fline=-.8;
+    angle=25;
     //Fifth Row
     for (int i=0; i<8; i++){
         glPushMatrix();
-        glTranslatef(tx,-1.3,-.8);
+        glTranslatef(tx,-1.3,fline);
+        glRotatef(angle, 0, 1, 0);
+        glRotatef(-10, 1, 0, 0);
         coloreaCubo(2);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
@@ -322,6 +410,14 @@ void levelThree(){
         glPopMatrix();
 
         tx+=0.4;
+        if (i<3){
+            fline-=.025;
+            angle-=(25/3);
+        }
+        else if (i>4){
+            fline+=.025;
+            angle-=(25/3);
+        }
     }
 }
 
