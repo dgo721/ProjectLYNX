@@ -28,6 +28,7 @@ double dirY=0.0;
 char msg[40];
 int crece=0;
 int opcion = 1;
+int ortho = 1;
 int nivel = 1;
 char* sound1 = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/beep3.wav";
 
@@ -39,11 +40,13 @@ int pantalla = 1; //bandera para pantallas
 /* GLUT callback Handlers */
 float x=50;
 float y=50;
+float angle=0;
+float fline=0;
 int colorCubo1=1;
 int colorCubo2=2;
 int colorCubo3=3;
 
-GLfloat light_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
+GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light_diffuse[] = { 0.85, 0.85, 0.85, 1.0 };
 GLfloat light_specular[] = { 0.1, 0.1, 0.1, 1.0 };
 GLfloat light_position[] = { 0.5, 0.5, 0.5, 1.0 };
@@ -113,11 +116,14 @@ void coloreaCubo(int x){
 void levelOne(){
 
     float tx=-1.2;
+    fline=-.8;
+    angle=25;
 
     //First Row
     for (int i=0; i<5; i++){
         glPushMatrix();
-        glTranslatef(tx,.3,-.8);
+        glTranslatef(tx,.3,fline);
+        glRotatef(angle, 0, 1, 0);
         coloreaCubo(1);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
@@ -125,14 +131,22 @@ void levelOne(){
         glPopMatrix();
 
         tx+=0.6;
+        angle-=12.5;
+        if (i<2)
+            fline-=.055;
+        else
+            fline+=.055;
     }
 
     //Second Row
     tx=-1.2;
+    angle=25;
+    fline=-.8;
 
     for (int i=0; i<5; i++){
         glPushMatrix();
-        glTranslatef(tx,-.3,-.8);
+        glTranslatef(tx,-.3,fline);
+        glRotatef(angle, 0, 1, 0);
         coloreaCubo(2);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
@@ -140,14 +154,23 @@ void levelOne(){
         glPopMatrix();
 
         tx+=0.6;
+        angle-=12.5;
+        if (i<2)
+            fline-=.055;
+        else
+            fline+=.055;
     }
 
     //Third Row
     tx=-1.2;
+    angle=25;
+    fline=-.8;
 
     for (int i=0; i<5; i++){
         glPushMatrix();
-        glTranslatef(tx,-.9,-.8);
+        glTranslatef(tx,-.9,fline);
+        glRotatef(angle, 0, 1, 0);
+        glRotatef(-15, 1, 0, 0);
         coloreaCubo(3);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
@@ -155,6 +178,11 @@ void levelOne(){
         glPopMatrix();
 
         tx+=0.6;
+        angle-=12.5;
+        if (i<2)
+            fline-=.075;
+        else
+            fline+=.075;
     }
 }
 
@@ -364,16 +392,16 @@ void reshape (int w, int h)
     glViewport (0, 0, (GLsizei) w, (GLsizei) h);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
-    if (opcion == 1)
+    if (ortho == 1)
         glFrustum (X_MIN, X_MAX, Y_MIN, Y_MAX, 1, 20);
     else
         glOrtho(X_MIN, X_MAX, Y_MIN, Y_MAX, 2, 20);
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity() ;
-    if (opcion == 1)
+    if (ortho == 1)
       gluLookAt (0, 0, 1.0, 0, 0, 0, 0.0, 1, 0.0);
     else
-      gluLookAt (0, 0, 0.0, 0, 0, 0, 0.0, 1, 0.0);
+      gluLookAt (0, 0, 1.5, 0, 0, 0, 0.0, 1, 0.0);
 
 }
 
@@ -424,6 +452,14 @@ void myKeyboard(unsigned char theKey, int mouseX, int mouseY)
             nivel=3;
             minutos = 0;
             segundos = 0;
+            glutPostRedisplay();
+            break;
+        case 52:
+            ortho=0;
+            glutPostRedisplay();
+            break;
+        case 53:
+            ortho=1;
             glutPostRedisplay();
             break;
         case 27:
