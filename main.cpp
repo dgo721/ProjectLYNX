@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <string>
+using namespace std;
 #include <mmsystem.h>
 #define GLUT_DISABLE_ATEXIT_HACK
 #ifdef __APPLE__
@@ -15,8 +17,6 @@
 #else
 #include <GL/glut.h>
 #endif
-
-using namespace std;
 
 const int X_MAX=1;
 const int X_MIN=-1;
@@ -30,7 +30,7 @@ int crece=0;
 int opcion = 1;
 int ortho = 1;
 int nivel = 1;
-char* sound1 = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/beep3.wav";
+char* sound1 = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/beep3.wav";
 
 int cont = 0; //score
 int minutos = 0;
@@ -52,10 +52,11 @@ GLfloat light_specular[] = { 0.1, 0.1, 0.1, 1.0 };
 GLfloat light_position[] = { 0.5, 0.5, 0.5, 1.0 };
 
 GLfloat mat_ambient[] = {0.2,0.2,0.2,1.0};
-GLfloat mat_diffuse[][4] = {{0.0f, 0.0f, 0.0f, 1.0f},
+GLfloat mat_diffuse[][5] = {{0.0f, 0.0f, 0.0f, 1.0f},
                             {1.0f, 0.0f, 0.0f, 1.0f},
                             {0.0f, 1.0f, 0.0f, 1.0f},
-                            {0.0f, 0.0f, 1.0f, 1.0f}};
+                            {0.0f, 0.0f, 1.0f, 1.0f},
+                            {1.0f, 0.5f, 0.0f, 1.0f}};
 GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
 
 static void init()
@@ -592,22 +593,46 @@ void specialKeys(int key, int x, int y){
 
 void myMouse(int button, int state, int x, int y)
 {
-        //Si el usuario oprime el boton izq del mouse
-        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-        {
-            pantalla= 1;
-            //glLoadIdentity ();
-            //glTranslatef(glx,gly,0);
-        }
-        if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-        {
-            pantalla= 0;
-            segundos = 0;
-            minutos = 0;
-            cont = 0;
-            //glLoadIdentity ();
-            //glTranslatef(glx,gly,0);
-        }
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+        pantalla = 1;
+    }
+    /*if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
+        pantalla = 0;
+        segundos = 0;
+        minutos = 0;
+        cont = 0;
+    }*/
+    float x2,y2;
+
+    if (x<=320 && y<=240){
+
+        x2=((float)x/320)-1;
+        y2=(((float)y/240)-1)*-1;
+    } else if (x>=320 && y<=240){
+
+        x2=((float)(x-320)/320);
+        y2=(((float)y/240)-1)*-1;
+    } else if (x<=320 && y>=240){
+
+        x2=((float)x/320)-1;
+        y2=(((float)(y-240)/240))*-1;
+    } else if (x>=320 && y>=240){
+
+        x2=((float)(x-320)/320);
+        y2=(((float)(y-240)/240))*-1;
+    }
+
+    if (x==320)
+        x2=0;
+    if (y==240)
+        y2=0;
+
+    cout << "Posicion x -> ";
+    cout << x2;
+    cout << "\n";
+    cout << "Posicion y -> ";
+    cout << y2;
+    cout << "\n";
 
 }
 
