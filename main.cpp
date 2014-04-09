@@ -1,7 +1,6 @@
 /*
  1089909_0611478
  LYNX
- Avance de Proyecto - Prototipo de Cubos con Sonido // Materiales Luces incluidas
  */
 
 #include <windows.h>
@@ -45,6 +44,7 @@ float fline=0;
 int colorCubo1=1;
 int colorCubo2=2;
 int colorCubo3=3;
+int cubol1=0;
 
 GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
 GLfloat light_diffuse[] = { 0.85, 0.85, 0.85, 1.0 };
@@ -56,7 +56,8 @@ GLfloat mat_diffuse[][5] = {{0.0f, 0.0f, 0.0f, 1.0f},
                             {1.0f, 0.0f, 0.0f, 1.0f},
                             {0.0f, 1.0f, 0.0f, 1.0f},
                             {0.0f, 0.0f, 1.0f, 1.0f},
-                            {1.0f, 0.5f, 0.0f, 1.0f}};
+                            {0.0f, 0.65f, 0.15f, 1.0f},
+                            {0.32f, 0.35f, 0.12f, 1.0f}};
 GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
 
 static void init()
@@ -87,19 +88,22 @@ void draw3dString (void *font, char *s, float x, float y, float z) {
 void colorCubo(int x){
 
     glMaterialfv(GL_FRONT,GL_AMBIENT,mat_ambient);
-    if (x==1){
-        //glColor3f(0.5,0.0,0.0);
-        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[1]);
-    } else if (x==2) {
-        //glColor3f(0.0,0.5,0.0);
-        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[2]);
-    } else if (x==3) {
-        //glColor3f(0.0,0.0,0.5);
-        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[3]);
-    } else {
-        //glColor3f(0.0,0.0,0.0);
-        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[0]);
+
+    switch (x){
+        case 1: glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[1]);
+            break;
+        case 2: glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[2]);
+            break;
+        case 3: glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[3]);
+            break;
+        case 4: glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[4]);
+            break;
+        case 5: glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[5]);
+            break;
+        default: glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[0]);
+            break;
     }
+
     glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular);
 }
 
@@ -125,7 +129,10 @@ void levelOne(){
         glPushMatrix();
         glTranslatef(tx,.3,fline);
         glRotatef(angle, 0, 1, 0);
-        coloreaCubo(1);
+        if ((i+1)==cubol1)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.4);
@@ -148,7 +155,10 @@ void levelOne(){
         glPushMatrix();
         glTranslatef(tx,-.3,fline);
         glRotatef(angle, 0, 1, 0);
-        coloreaCubo(2);
+        if ((i+6)==cubol1)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.4);
@@ -172,7 +182,10 @@ void levelOne(){
         glTranslatef(tx,-.9,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-15, 1, 0, 0);
-        coloreaCubo(3);
+        if ((i+11)==cubol1)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.4);
@@ -591,17 +604,52 @@ void specialKeys(int key, int x, int y){
     }
 }
 
+int clicCuboL1(float x, float y){
+    cout << "Posicion x -> ";
+    cout << x;
+    cout << "\n";
+    cout << "Posicion y -> ";
+    cout << y;
+    cout << "\n";
+
+    if (y>0 && y<0.3){
+        if (x>-.9 && x<-.5)
+            return 1;
+        if (x>-.5 && x<-.16)
+            return 2;
+        if (x>-.16 && x<.16)
+            return 3;
+        if (x>.16 && x<.5)
+            return 4;
+        if (x>.5 && x<.9)
+            return 5;
+    } else if (y>-.3 && y<0){
+        if (x>-.9 && x<-.5)
+            return 6;
+        if (x>-.5 && x<-.16)
+            return 7;
+        if (x>-.16 && x<.16)
+            return 8;
+        if (x>.16 && x<.5)
+            return 9;
+        if (x>.5 && x<.9)
+            return 10;
+    } else if (y>-.7 && y<-.3){
+        if (x>-.9 && x<-.5)
+            return 11;
+        if (x>-.5 && x<-.16)
+            return 12;
+        if (x>-.16 && x<.16)
+            return 13;
+        if (x>.16 && x<.5)
+            return 14;
+        if (x>.5 && x<.9)
+            return 15;
+    }
+}
+
 void myMouse(int button, int state, int x, int y)
 {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
-        pantalla = 1;
-    }
-    /*if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
-        pantalla = 0;
-        segundos = 0;
-        minutos = 0;
-        cont = 0;
-    }*/
     float x2,y2;
 
     if (x<=320 && y<=240){
@@ -627,13 +675,29 @@ void myMouse(int button, int state, int x, int y)
     if (y==240)
         y2=0;
 
-    cout << "Posicion x -> ";
+    /*cout << "Posicion x -> ";
     cout << x2;
     cout << "\n";
     cout << "Posicion y -> ";
     cout << y2;
-    cout << "\n";
+    cout << "\n";*/
 
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+        pantalla = 1;
+
+        cubol1 = clicCuboL1(x2, y2);
+        cout << "El cubo -> ";
+        cout << cubol1;
+        cout << "\n";
+
+        glutPostRedisplay();
+    }
+    /*if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
+        pantalla = 0;
+        segundos = 0;
+        minutos = 0;
+        cont = 0;
+    }*/
 }
 
 /* Program entry point */
