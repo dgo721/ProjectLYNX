@@ -44,6 +44,7 @@ float x=50;
 float y=50;
 float angle=0;
 float fline=0;
+static GLuint texName[36];
 int colorCubo1=1;
 int colorCubo2=2;
 int colorCubo3=3;
@@ -63,10 +64,9 @@ GLfloat mat_diffuse[][5] = {{0.0f, 0.0f, 0.0f, 1.0f},
                             {0.32f, 0.35f, 0.12f, 1.0f}};
 GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
 
-GLuint loadTexture(Image* image) {
-	GLuint textureId;
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
+void loadTexture(Image* image, int k) {
+
+	glBindTexture(GL_TEXTURE_2D, texName[k]);
 
 	glTexImage2D(GL_TEXTURE_2D,
 				 0,
@@ -76,17 +76,16 @@ GLuint loadTexture(Image* image) {
 				 GL_RGB,
 				 GL_UNSIGNED_BYTE,
 				 image->pixels);
-	return textureId;
 }
 
 GLuint _textureId;
 
 void initRendering() {
-	//glEnable(GL_NORMALIZE);
-	//glEnable(GL_COLOR_MATERIAL);
-
-	Image* image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/vtr.bmp");
-	_textureId = loadTexture(image);
+    GLuint i=0;
+    glGenTextures(15, texName);
+    Image* image;
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img1.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img2.bmp");loadTexture(image,i++);
 	delete image;
 }
 
@@ -101,6 +100,8 @@ static void init()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
+    //glEnable(GL_COLOR_MATERIAL);
 }
 
 void draw3dString (void *font, char *s, float x, float y, float z) {
@@ -151,14 +152,14 @@ void coloreaCubo(int x){
 void drawQuad(){
 
     glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, _textureId);
+	glBindTexture(GL_TEXTURE_2D, texName[1]);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glScalef(0.15,0.15,0.15);
     glBegin(GL_QUADS);
-	glNormal3f(0.0f, 1.0f, 0.0f);
+	glNormal3f(0.0f, 0.0f, 1.0f);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 2.0f);
 	glTexCoord2f(1.0f, 0.0f);

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1397063442 source:c:\users\diego\documents\codeblocks\projectlynx\main.cpp
+1398048438 source:c:\users\diego\documents\codeblocks\projectlynx\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -8,9 +8,15 @@
 	<mmsystem.h>
 	<GLUT/glut.h>
 	<GL/glut.h>
+	"imageloader.h"
+	<assert.h>
+	<fstream>
+	"imageloader.h"
 
 976692172 c:\users\diego\documents\others\glut\include\gl\glut.h
 	<windows.h>
 	<GL/gl.h>
 	<GL/glu.h>
+
+1219435590 c:\users\diego\documents\codeblocks\projectlynx\imageloader.h
 
