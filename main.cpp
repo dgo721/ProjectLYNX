@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <algorithm>
 #include <vector>
 #include <ctime>
@@ -31,16 +32,24 @@ const int Y_MIN=-1;
 const double DELTA= 0.1;
 double dirX=DELTA;//derecha x=-1,Y=0 IZQUIERDA, X=0;Y=-1 ABAJO, X=0,Y=1 ARRIBA
 double dirY=0.0;
+int altoV = 480;
+int anchoV = 640;
 char msg[40];
+string msg1;
+string msgscore;
 int crece=0;
 int opcion = 1;
 int ortho = 1;
-int nivel = 1;
+int nivel = 2;
+int limite = 24;
+int flagtextmaster = 1; //Bandera de control en cambio de figura
 int resp = 0;
-char* sound1 = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/beep3.wav";
+char* sdplay = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/gameplay.wav";
+char* sdcorrect = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/correct.wav";
+char* sderror = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/error.wav";
 
-int cont = 0; //score
-int minutos = 0;
+int score = 0; //score
+int minutos = 2;
 int segundos = 0;
 int pantalla = 1; //bandera para pantallas
 
@@ -54,16 +63,19 @@ int colorCubo1=1;
 int colorCubo2=2;
 int colorCubo3=3;
 int cubol1=0;
+int cubol=0;
 int textmaster=0;
+int swapt=0;//Variable de cambio de pantalla en imagenes
 
 int myrandom (int i) { return rand()%i;}
 vector<int> thevector;
 vector<int>::iterator it;
 
-GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
-GLfloat light_diffuse[] = { 0.85, 0.85, 0.85, 1.0 };
+GLfloat light_ambient[] = { 0.4,0.4,0.4,1.0 };
+GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light_specular[] = { 0.1, 0.1, 0.1, 1.0 };
-GLfloat light_position[] = { 0.5, 0.5, 0.5, 1.0 };
+GLfloat light_position[] = {3.0, 0.0, 0.0, 1.0 };
+GLfloat light_position1[] = {-3.0, 0.0, 0.0, 1.0 };
 
 GLfloat mat_ambient[] = {0.2,0.2,0.2,1.0};
 GLfloat mat_diffuse[][5] = {{0.0f, 0.0f, 0.0f, 1.0f},
@@ -71,13 +83,14 @@ GLfloat mat_diffuse[][5] = {{0.0f, 0.0f, 0.0f, 1.0f},
                             {0.0f, 1.0f, 0.0f, 1.0f},
                             {0.0f, 0.0f, 1.0f, 1.0f},
                             {0.0f, 0.65f, 0.15f, 1.0f},
-                            {0.32f, 0.35f, 0.12f, 1.0f}};
+                            {0.42f, 0.45f, 0.22f, 1.0f},
+                            {0.5f, 0.0f, 0.0f, 1.0f}};
 GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
 
 void theRandom(){
     //srand ( unsigned ( std::time(0) ) );
 
-    for (int i=0; i<15; ++i)
+    for (int i=0; i<limite; ++i)
         thevector.push_back(i);
     random_shuffle (thevector.begin(), thevector.end());
     random_shuffle (thevector.begin(), thevector.end(), myrandom);
@@ -92,16 +105,10 @@ void theRandom(){
 void initRandom(){
     srand ( unsigned ( std::time(0) ) );
 
-    for (int i=0; i<15; ++i)
+    for (int i=0; i<limite; ++i)
         thevector.push_back(i);
     random_shuffle (thevector.begin(), thevector.end());
     random_shuffle (thevector.begin(), thevector.end(), myrandom);
-
-    /*cout << "myvector contains:";
-      for (vector<int>::iterator it=thevector.begin(); it!=thevector.end(); it++)
-        cout << ' ' << *it;
-
-      cout << '\n';*/
 }
 
 void loadTexture(Image* image, int k) {
@@ -122,7 +129,7 @@ GLuint _textureId;
 
 void initRendering() {
     GLuint i=0;
-    glGenTextures(15, texName);
+    glGenTextures(40, texName);
     Image* image;
 	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img1.bmp");loadTexture(image,i++);
 	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img2.bmp");loadTexture(image,i++);
@@ -139,6 +146,31 @@ void initRendering() {
 	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img13.bmp");loadTexture(image,i++);
 	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img14.bmp");loadTexture(image,i++);
 	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img15.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img16.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img17.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img18.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img19.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img20.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img21.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img22.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img23.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img24.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img25.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img26.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img27.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img28.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img29.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img30.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img31.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img32.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img33.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img34.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img35.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img36.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img37.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img38.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img39.bmp");loadTexture(image,i++);
+	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img40.bmp");loadTexture(image,i++);
 	delete image;
 }
 
@@ -149,12 +181,19 @@ static void init()
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
+    glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
+
     glClearColor(0.3,0.3,0.3,1);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
     glEnable(GL_NORMALIZE);
     //glEnable(GL_COLOR_MATERIAL);
+    //PlaySound(sdplay,NULL, SND_ASYNC|SND_NOSTOP);
 }
 
 void draw3dString (void *font, char *s, float x, float y, float z) {
@@ -191,17 +230,6 @@ void colorCubo(int x){
     glMaterialfv(GL_FRONT,GL_SPECULAR,mat_specular);
 }
 
-void coloreaCubo(int x){
-
-    if (x==1){
-        colorCubo(colorCubo1);
-    } else if (x==2) {
-        colorCubo(colorCubo2);
-    } else if (x==3) {
-        colorCubo(colorCubo3);
-    }
-}
-
 void drawQuad(){
 
     glEnable(GL_TEXTURE_2D);
@@ -219,13 +247,13 @@ void drawQuad(){
     glBegin(GL_QUADS);
 	glNormal3f(0.0f, 0.0f, 1.0f);
 	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 2.0f);
+	glVertex3f(-1.0f, -1.0f, 1.5f);
 	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 2.0f);
+	glVertex3f(1.0f, -1.0f, 1.5f);
 	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1.0f, 1.0f, 2.0f);
+	glVertex3f(1.0f, 1.0f, 1.5f);
 	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, 2.0f);
+	glVertex3f(-1.0f, 1.0f, 1.5f);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -352,10 +380,21 @@ void levelTwo(){
         glPushMatrix();
         glTranslatef(tx,.3,fline);
         glRotatef(angle, 0, 1, 0);
-        coloreaCubo(1);
+        if ((i+1)==cubol)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.35);
+
+        if (textmaster == *it)
+            resp = i+1;
+
+        glPushMatrix();
+        drawQuad();
+        glPopMatrix();
+
         glPopMatrix();
 
         tx+=0.5;
@@ -377,10 +416,21 @@ void levelTwo(){
         glPushMatrix();
         glTranslatef(tx,-.15,fline);
         glRotatef(angle, 0, 1, 0);
-        coloreaCubo(2);
+        if ((i+7)==cubol)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.35);
+
+        if (textmaster == *it)
+            resp = i+7;
+
+        glPushMatrix();
+        drawQuad();
+        glPopMatrix();
+
         glPopMatrix();
 
         tx+=0.5;
@@ -402,10 +452,21 @@ void levelTwo(){
         glPushMatrix();
         glTranslatef(tx,-.6,fline);
         glRotatef(angle, 0, 1, 0);
-        coloreaCubo(3);
+        if ((i+13)==cubol)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.35);
+
+        if (textmaster == *it)
+            resp = i+13;
+
+        glPushMatrix();
+        drawQuad();
+        glPopMatrix();
+
         glPopMatrix();
 
         tx+=0.5;
@@ -428,10 +489,21 @@ void levelTwo(){
         glTranslatef(tx,-1.15,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-15, 1, 0, 0);
-        coloreaCubo(1);
+        if ((i+19)==cubol)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.35);
+
+        if (textmaster == *it)
+            resp = i+19;
+
+        glPushMatrix();
+        drawQuad();
+        glPopMatrix();
+
         glPopMatrix();
 
         tx+=0.5;
@@ -456,10 +528,20 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,.3,fline);
         glRotatef(angle, 0, 1, 0);
-        coloreaCubo(1);
+        if ((i+1)==cubol1)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
+        if (textmaster == *it)
+            resp = i+1;
+
+        glPushMatrix();
+        drawQuad();
+        glPopMatrix();
+
         glPopMatrix();
 
         tx+=0.4;
@@ -481,10 +563,20 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,-0.1,fline);
         glRotatef(angle, 0, 1, 0);
-        coloreaCubo(2);
+        if ((i+9)==cubol1)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
+        if (textmaster == *it)
+            resp = i+9;
+
+        glPushMatrix();
+        drawQuad();
+        glPopMatrix();
+
         glPopMatrix();
 
         tx+=0.4;
@@ -507,10 +599,20 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,-0.5,fline);
         glRotatef(angle, 0, 1, 0);
-        coloreaCubo(3);
+        if ((i+17)==cubol1)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
+        if (textmaster == *it)
+            resp = i+17;
+
+        glPushMatrix();
+        drawQuad();
+        glPopMatrix();
+
         glPopMatrix();
 
         tx+=0.4;
@@ -533,12 +635,21 @@ void levelThree(){
         glTranslatef(tx,-0.9,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-10, 1, 0, 0);
-        coloreaCubo(1);
+        if ((i+25)==cubol1)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
+        if (textmaster == *it)
+            resp = i+25;
+
+        glPushMatrix();
+        drawQuad();
         glPopMatrix();
 
+        glPopMatrix();
         tx+=0.4;
         if (i<3){
             fline-=.025;
@@ -559,10 +670,20 @@ void levelThree(){
         glTranslatef(tx,-1.3,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-10, 1, 0, 0);
-        coloreaCubo(2);
+        if ((i+33)==cubol1)
+            colorCubo(4);
+        else
+            colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
+        if (textmaster == *it)
+            resp = i+33;
+
+        glPushMatrix();
+        drawQuad();
+        glPopMatrix();
+
         glPopMatrix();
 
         tx+=0.4;
@@ -599,13 +720,39 @@ static void display(void)
         glPushMatrix();
         glTranslatef(0,1.2,-.8);
         glRotatef(20, 1.0, 0.0, 0.0);
-        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[0]);
+        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[3]);
         glutSolidCube(0.5);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.5);
 
+        ///////////////
         glPushMatrix();
-        textmaster = rand() % 15;
+        glTranslatef(0.5,0.1,0);
+        glScaled(0.015, 0.015, 0.015);
+        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[1]);
+        sprintf(msg,"%s%d", "Score: ", score);
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(-1.25,0.1,0.0);
+        glScaled(0.015, 0.015, 0.015);
+        sprintf(msg, "%d %s %d", minutos, ":", segundos);
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
+        glPopMatrix();
+
+        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[3]);
+        glPushMatrix();
+
+        if (flagtextmaster == 1){
+
+            switch (nivel){
+                case 1: textmaster = rand() % 15; break;
+                case 2: textmaster = rand() % 24; break;
+                case 3: textmaster = rand() % 40; break;
+                default: textmaster = rand() % 15; break;
+            }
+            flagtextmaster = 0;
+        }
         //cout << "El master -> " << textmaster << endl;
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texName[textmaster]);
@@ -633,14 +780,19 @@ static void display(void)
 
         if (nivel==1){
             it=thevector.begin();
+            limite=15;
             levelOne();
         } else if (nivel==2){
+            it=thevector.begin();
+            limite=24;
             levelTwo();
         } else if (nivel==3){
+            it=thevector.begin();
+            limite=40;
             levelThree();
         }
 
-        sprintf(msg,"%s%d", "Score:", cont);
+        sprintf(msg,"%s%d", "Score:", score);
         draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -0.9, .7, 0);
 
         sprintf(msg, "%d %s %d", minutos, ":", segundos);
@@ -652,16 +804,18 @@ static void display(void)
 
 void swapTimer(int valor){
 
-    if (valor == 0){
-        glutTimerFunc(5000,swapTimer,1);
-    }
-    else if(valor == 1){
+    if (swapt == 5){
         thevector.clear();
         theRandom();
         it=thevector.begin();
+        PlaySound(sderror,NULL, SND_ASYNC);
+        flagtextmaster = 1;
+        swapt=0;
         glutPostRedisplay();
-        glutTimerFunc(1,swapTimer,0);
-    }
+    } else
+        swapt++;
+
+    glutTimerFunc(1000,swapTimer,1);
 }
 
 void myTimer( int valor){
@@ -669,11 +823,11 @@ void myTimer( int valor){
     if(pantalla == 1 )
     {
 
-        segundos++;
-        if(segundos == 60)
+        segundos--;
+        if(segundos == -1)
         {
-            segundos = 0;
-            minutos++;
+            segundos = 59;
+            minutos--;
         }
         glutPostRedisplay();
     }
@@ -683,19 +837,15 @@ void myTimer( int valor){
 
 void reshape (int w, int h)
 {
+    altoV = h;
+    anchoV = w;
     glViewport (0, 0, (GLsizei) w, (GLsizei) h);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
-    if (ortho == 1)
-        glFrustum (X_MIN, X_MAX, Y_MIN, Y_MAX, 1, 20);
-    else
-        glOrtho(X_MIN, X_MAX, Y_MIN, Y_MAX, 2, 20);
+    glFrustum (X_MIN, X_MAX, Y_MIN, Y_MAX, 1, 20);
     glMatrixMode (GL_MODELVIEW);
-    glLoadIdentity() ;
-    if (ortho == 1)
-      gluLookAt (0, 0, 1.0, 0, 0, 0, 0.0, 1, 0.0);
-    else
-      gluLookAt (0, 0, 1.5, 0, 0, 0, 0.0, 1, 0.0);
+    glLoadIdentity();
+    gluLookAt (0, 0, 1.0, 0, 0, 0, 0.0, 1, 0.0);
 
 }
 
@@ -710,7 +860,6 @@ void myKeyboard(unsigned char theKey, int mouseX, int mouseY)
             colorCubo1+=1;
             colorCubo2+=1;
             colorCubo3+=1;
-            PlaySound(sound1,NULL, SND_ASYNC);
             glutPostRedisplay();
             break;
         case 'a':
@@ -718,7 +867,7 @@ void myKeyboard(unsigned char theKey, int mouseX, int mouseY)
             colorCubo1-=1;
             colorCubo2-=1;
             colorCubo3-=1;
-            PlaySound(sound1,NULL, SND_ASYNC);
+            //PlaySound(sound1,NULL, SND_ASYNC);
             glutPostRedisplay();
             break;
         case 'w':
@@ -732,7 +881,7 @@ void myKeyboard(unsigned char theKey, int mouseX, int mouseY)
             break;
         case 49:
             nivel=1;
-            minutos = 0;
+            minutos = 2;
             segundos = 0;
             thevector.clear();
             theRandom();
@@ -741,14 +890,20 @@ void myKeyboard(unsigned char theKey, int mouseX, int mouseY)
             break;
         case 50:
             nivel=2;
-            minutos = 0;
+            minutos = 2;
             segundos = 0;
+            thevector.clear();
+            theRandom();
+            it=thevector.begin();
             glutPostRedisplay();
             break;
         case 51:
             nivel=3;
             minutos = 0;
             segundos = 0;
+            thevector.clear();
+            theRandom();
+            it=thevector.begin();
             glutPostRedisplay();
             break;
         case 52:
@@ -772,14 +927,14 @@ void specialKeys(int key, int x, int y){
             colorCubo1+=1;
             colorCubo2+=1;
             colorCubo3+=1;
-            PlaySound(sound1,NULL, SND_ASYNC);
+
             glutPostRedisplay();
             break;
         case GLUT_KEY_LEFT:
             colorCubo1-=1;
             colorCubo2-=1;
             colorCubo3-=1;
-            PlaySound(sound1,NULL, SND_ASYNC);
+
             glutPostRedisplay();
             break;
         case GLUT_KEY_UP:
@@ -794,10 +949,10 @@ void specialKeys(int key, int x, int y){
 int clicCuboL1(float x, float y){
     /*cout << "Posicion x -> ";
     cout << x;
-    cout << "\n";
+    cout << "\n";*/
     cout << "Posicion y -> ";
     cout << y;
-    cout << "\n";*/
+    cout << "\n";
 
     if (y>0 && y<0.3){
         if (x>-.9 && x<-.5)
@@ -835,31 +990,96 @@ int clicCuboL1(float x, float y){
     }
 }
 
+int clicCuboL2(float x, float y){
+    cout << "Posicion x -> ";
+    cout << x;
+    cout << "\n";
+    /*cout << "Posicion y -> ";
+    cout << y;
+    cout << "\n";*/
+
+    if (y>0.04 && y<0.32){
+        if (x>-.9 && x<-.56)
+            return 1;
+        if (x>-.56 && x<-.28)
+            return 2;
+        if (x>-.28 && x<0)
+            return 3;
+        if (x>0 && x<.28)
+            return 4;
+        if (x>.28 && x<.56)
+            return 5;
+        if (x>.56 && x<.9)
+            return 6;
+    } else if (y>-.22 && y<0.04){
+        if (x>-.9 && x<-.56)
+            return 7;
+        if (x>-.56 && x<-.28)
+            return 8;
+        if (x>-.28 && x<0)
+            return 9;
+        if (x>0 && x<.28)
+            return 10;
+        if (x>.28 && x<.56)
+            return 11;
+        if (x>.56 && x<.9)
+            return 12;
+    } else if (y>-.5 && y<-.22){
+        if (x>-.9 && x<-.56)
+            return 13;
+        if (x>-.56 && x<-.28)
+            return 14;
+        if (x>-.28 && x<0)
+            return 15;
+        if (x>0 && x<.28)
+            return 16;
+        if (x>.28 && x<.56)
+            return 17;
+        if (x>.56 && x<.9)
+            return 18;
+    } else if (y>-.85 && y<-.5){
+        if (x>-.9 && x<-.56)
+            return 19;
+        if (x>-.56 && x<-.28)
+            return 20;
+        if (x>-.28 && x<0)
+            return 21;
+        if (x>0 && x<.28)
+            return 22;
+        if (x>.28 && x<.56)
+            return 23;
+        if (x>.56 && x<.9)
+            return 24;
+    }
+}
+
 void myMouse(int button, int state, int x, int y)
 {
     float x2,y2;
+    int base=anchoV/2;
+    int altura=altoV/2;
 
-    if (x<=320 && y<=240){
+    if (x<=base && y<=altura){
 
-        x2=((float)x/320)-1;
-        y2=(((float)y/240)-1)*-1;
-    } else if (x>=320 && y<=240){
+        x2=((float)x/base)-1;
+        y2=(((float)y/altura)-1)*-1;
+    } else if (x>=base && y<=altura){
 
-        x2=((float)(x-320)/320);
-        y2=(((float)y/240)-1)*-1;
-    } else if (x<=320 && y>=240){
+        x2=((float)(x-base)/base);
+        y2=(((float)y/altura)-1)*-1;
+    } else if (x<=base && y>=altura){
 
-        x2=((float)x/320)-1;
-        y2=(((float)(y-240)/240))*-1;
-    } else if (x>=320 && y>=240){
+        x2=((float)x/base)-1;
+        y2=(((float)(y-altura)/altura))*-1;
+    } else if (x>=base && y>=altura){
 
-        x2=((float)(x-320)/320);
-        y2=(((float)(y-240)/240))*-1;
+        x2=((float)(x-base)/base);
+        y2=(((float)(y-altura)/altura))*-1;
     }
 
-    if (x==320)
+    if (x==base)
         x2=0;
-    if (y==240)
+    if (y==altura)
         y2=0;
 
     /*cout << "Posicion x -> ";
@@ -873,26 +1093,30 @@ void myMouse(int button, int state, int x, int y)
         pantalla = 1;
 
         cubol1 = clicCuboL1(x2, y2);
+        cubol = clicCuboL2(x2, y2);
         //cout << "El cubo2 -> ";
         //cout << cubol1;
         //cout << "\n";
 
-        if (cubol1>=1 && cubol1<=15){
-            if (cubol1 == resp)
-                cout << "!!!!! CORRECTO !!!!!" << endl;
-            else
-                cout << "XxXxX INCORRECTO XxXxX" << endl;
+        if (cubol>=1 && cubol<=limite){
+            if (cubol == resp){
+                score+=5;
+                PlaySound(sdcorrect,NULL, SND_ASYNC);
+                //cout << "!!!!! CORRECTO !!!!!" << endl;
+            }
+            else{
+                PlaySound(sderror,NULL, SND_ASYNC);
+                //cout << "XxXxX INCORRECTO XxXxX" << endl;
+            }
 
+            flagtextmaster = 1;
+            swapt=0;
             thevector.clear();
             theRandom();
             it=thevector.begin();
             glutPostRedisplay();
             //glutTimerFunc(1,swapTimer,0);
         }
-
-        /*thevector.clear();
-        theRandom();
-        it=thevector.begin();*/
     }
     /*if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
         pantalla = 0;
@@ -900,6 +1124,10 @@ void myMouse(int button, int state, int x, int y)
         minutos = 0;
         cont = 0;
     }*/
+}
+
+void initLevel1(){
+    glutTimerFunc(1000,swapTimer,0);
 }
 
 /* Program entry point */
@@ -914,12 +1142,12 @@ int main(int argc, char *argv[])
     init();
     initRendering();
     initRandom();
+    initLevel1();
     glutDisplayFunc(display);
     glutKeyboardFunc(myKeyboard);
-    //glutTimerFunc(1,myTimer,1);
-    //glutTimerFunc(1,swapTimer,0);
+    //glutTimerFunc(1000,myTimer,1);
     glutReshapeFunc(reshape);
-    glutMouseFunc( myMouse );
+    glutMouseFunc(myMouse);
     glutSpecialFunc(specialKeys);
     glutMainLoop();
     return EXIT_SUCCESS;
