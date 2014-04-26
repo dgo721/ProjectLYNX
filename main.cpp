@@ -40,7 +40,7 @@ string msgscore;
 int crece=0;
 int opcion = 1;
 int ortho = 1;
-int nivel = 2;
+int nivel = 3;
 int limite = 24;
 int flagtextmaster = 1; //Bandera de control en cambio de figura
 int resp = 0;
@@ -62,7 +62,6 @@ static GLuint texName[36];
 int colorCubo1=1;
 int colorCubo2=2;
 int colorCubo3=3;
-int cubol1=0;
 int cubol=0;
 int textmaster=0;
 int swapt=0;//Variable de cambio de pantalla en imagenes
@@ -243,7 +242,14 @@ void drawQuad(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glScalef(0.15,0.15,0.15);
+	float scaletx = 0.15;
+
+	switch (nivel){
+        case 3: scaletx = 0.12; break;
+        default: scaletx = 0.15; break;
+	}
+
+    glScalef(scaletx,scaletx,scaletx);
     glBegin(GL_QUADS);
 	glNormal3f(0.0f, 0.0f, 1.0f);
 	glTexCoord2f(0.0f, 0.0f);
@@ -270,7 +276,7 @@ void levelOne(){
         glPushMatrix();
         glTranslatef(tx,.3,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+1)==cubol1)
+        if ((i+1)==cubol)
             colorCubo(4);
         else
             colorCubo(5);
@@ -304,7 +310,7 @@ void levelOne(){
         glPushMatrix();
         glTranslatef(tx,-.3,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+6)==cubol1)
+        if ((i+6)==cubol)
             colorCubo(4);
         else
             colorCubo(5);
@@ -339,7 +345,7 @@ void levelOne(){
         glTranslatef(tx,-.9,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-15, 1, 0, 0);
-        if ((i+11)==cubol1)
+        if ((i+11)==cubol)
             colorCubo(4);
         else
             colorCubo(5);
@@ -528,7 +534,7 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,.3,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+1)==cubol1)
+        if ((i+1)==cubol)
             colorCubo(4);
         else
             colorCubo(5);
@@ -563,7 +569,7 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,-0.1,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+9)==cubol1)
+        if ((i+9)==cubol)
             colorCubo(4);
         else
             colorCubo(5);
@@ -599,7 +605,7 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,-0.5,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+17)==cubol1)
+        if ((i+17)==cubol)
             colorCubo(4);
         else
             colorCubo(5);
@@ -635,7 +641,7 @@ void levelThree(){
         glTranslatef(tx,-0.9,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-10, 1, 0, 0);
-        if ((i+25)==cubol1)
+        if ((i+25)==cubol)
             colorCubo(4);
         else
             colorCubo(5);
@@ -670,7 +676,7 @@ void levelThree(){
         glTranslatef(tx,-1.3,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-10, 1, 0, 0);
-        if ((i+33)==cubol1)
+        if ((i+33)==cubol)
             colorCubo(4);
         else
             colorCubo(5);
@@ -949,10 +955,10 @@ void specialKeys(int key, int x, int y){
 int clicCuboL1(float x, float y){
     /*cout << "Posicion x -> ";
     cout << x;
-    cout << "\n";*/
+    cout << "\n";
     cout << "Posicion y -> ";
     cout << y;
-    cout << "\n";
+    cout << "\n";*/
 
     if (y>0 && y<0.3){
         if (x>-.9 && x<-.5)
@@ -991,12 +997,6 @@ int clicCuboL1(float x, float y){
 }
 
 int clicCuboL2(float x, float y){
-    cout << "Posicion x -> ";
-    cout << x;
-    cout << "\n";
-    /*cout << "Posicion y -> ";
-    cout << y;
-    cout << "\n";*/
 
     if (y>0.04 && y<0.32){
         if (x>-.9 && x<-.56)
@@ -1053,6 +1053,102 @@ int clicCuboL2(float x, float y){
     }
 }
 
+int clicCuboL3(float x, float y){
+    cout << "Posicion x -> ";
+    cout << x;
+    cout << "\n";
+    /*cout << "Posicion y -> ";
+    cout << y;
+    cout << "\n";*/
+
+    if (y>0.05 && y<0.3){
+        if (x>-.94 && x<-.68)
+            return 1;
+        if (x>-.68 && x<-.44)
+            return 2;
+        if (x>-.44 && x<-.22)
+            return 3;
+        if (x>-.22 && x<0)
+            return 4;
+        if (x>0 && x<.21)
+            return 5;
+        if (x>.21 && x<.455)
+            return 6;
+        if (x>.455 && x<.685)
+            return 7;
+        if (x>.685 && x<.94)
+            return 8;
+    } else if (y>-.15 && y<0.05){
+        if (x>-.94 && x<-.68)
+            return 9;
+        if (x>-.68 && x<-.44)
+            return 10;
+        if (x>-.44 && x<-.22)
+            return 11;
+        if (x>-.22 && x<0)
+            return 12;
+        if (x>0 && x<.21)
+            return 13;
+        if (x>.21 && x<.455)
+            return 14;
+        if (x>.455 && x<.685)
+            return 15;
+        if (x>.685 && x<.94)
+            return 16;
+    } else if (y>-.4 && y<-.15){
+        if (x>-.94 && x<-.68)
+            return 17;
+        if (x>-.68 && x<-.44)
+            return 18;
+        if (x>-.44 && x<-.22)
+            return 19;
+        if (x>-.22 && x<0)
+            return 20;
+        if (x>0 && x<.21)
+            return 21;
+        if (x>.21 && x<.455)
+            return 22;
+        if (x>.455 && x<.685)
+            return 23;
+        if (x>.685 && x<.94)
+            return 24;
+    } else if (y>-.625 && y<-.4){
+        if (x>-.94 && x<-.68)
+            return 25;
+        if (x>-.68 && x<-.44)
+            return 26;
+        if (x>-.44 && x<-.22)
+            return 27;
+        if (x>-.22 && x<0)
+            return 28;
+        if (x>0 && x<.21)
+            return 29;
+        if (x>.21 && x<.455)
+            return 30;
+        if (x>.455 && x<.685)
+            return 31;
+        if (x>.685 && x<.94)
+            return 32;
+    } else if (y>-.9 && y<-.625){
+        if (x>-.94 && x<-.68)
+            return 33;
+        if (x>-.68 && x<-.44)
+            return 34;
+        if (x>-.44 && x<-.22)
+            return 35;
+        if (x>-.22 && x<0)
+            return 36;
+        if (x>0 && x<.21)
+            return 37;
+        if (x>.21 && x<.455)
+            return 38;
+        if (x>.455 && x<.685)
+            return 39;
+        if (x>.685 && x<.94)
+            return 40;
+    }
+}
+
 void myMouse(int button, int state, int x, int y)
 {
     float x2,y2;
@@ -1092,8 +1188,11 @@ void myMouse(int button, int state, int x, int y)
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
         pantalla = 1;
 
-        cubol1 = clicCuboL1(x2, y2);
-        cubol = clicCuboL2(x2, y2);
+        switch (nivel){
+            case 1: cubol = clicCuboL1(x2, y2); break;
+            case 2: cubol = clicCuboL2(x2, y2); break;
+            case 3: cubol = clicCuboL3(x2, y2); break;
+        }
         //cout << "El cubo2 -> ";
         //cout << cubol1;
         //cout << "\n";
