@@ -40,18 +40,25 @@ int crece=0;
 int opcion = 1;
 int ortho = 1;
 int nivel = 3;
-int limite = 24;
+int limite = 40;
+int imgrand1=1, imgrand2 = 2, imgrand3 = 3, imgrand4 = 4, imgrand5 = 5, imgrand6 = 6;
+float angulo=15;
 bool pausa = false;
 bool menuselect = false;
+bool rescorrect = false;
+bool resincorrect = false;
+bool notplaying = true;
 int flagtextmaster = 1; //Bandera de control en cambio de figura
 int resp = 0;
 char* sdplay = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/gameplay.wav";
 char* sdcorrect = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/correct.wav";
 char* sderror = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/error.wav";
+char* sdtictoc = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/tictoc.wav";
+char* sdbuzzer = "C:/Users/Diego/Documents/CodeBlocks/ProjectLYNX/sonido/buzzer.wav";
 
 int score = 0; //score
 int minutos = 2;
-int segundos = 0;
+int segundos = 1;
 int pantalla = 0; //bandera para pantallas
 
 /* GLUT callback Handlers */
@@ -85,6 +92,19 @@ GLfloat mat_diffuse[][5] = {{0.0f, 0.0f, 0.0f, 1.0f},
                             {0.42f, 0.45f, 0.22f, 1.0f},
                             {0.5f, 0.0f, 0.0f, 1.0f}};
 GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
+
+void MediaPlayer (int x){
+    switch (x) {
+        case 1:{
+            if (notplaying!=true)
+                PlaySound(sdplay,NULL, SND_ASYNC|SND_LOOP);
+        } break;
+        case 2:PlaySound(sdcorrect,NULL, SND_ASYNC); break;
+        case 3:PlaySound(sderror,NULL, SND_ASYNC); break;
+        case 4:PlaySound(sdtictoc,NULL, SND_ASYNC); break;
+        case 5:PlaySound(sdbuzzer,NULL, SND_ASYNC); break;
+    }
+}
 
 void theRandom(){
     //srand ( unsigned ( std::time(0) ) );
@@ -128,7 +148,7 @@ GLuint _textureId;
 
 void initRendering() {
     GLuint i=0;
-    glGenTextures(40, texName);
+    glGenTextures(55, texName);
     Image* image;
 
     for (int n=1; n<=limite; n++){
@@ -137,46 +157,19 @@ void initRendering() {
         loadTexture(image,i++);
     }
 
-	/*image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img1.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img2.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img3.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img4.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img5.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img6.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img7.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img8.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img9.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img10.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img11.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img12.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img13.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img14.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img15.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img16.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img17.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img18.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img19.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img20.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img21.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img22.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img23.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img24.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img25.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img26.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img27.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img28.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img29.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img30.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img31.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img32.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img33.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img34.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img35.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img36.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img37.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img38.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img39.bmp");loadTexture(image,i++);
-	image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/img40.bmp");loadTexture(image,i++);*/
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/lynx.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/play.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/controls.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/credits.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/salir.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/level.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/level1.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/level2.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/level3.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/backw.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/back.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/restart.bmp");loadTexture(image,i++);
+
 	delete image;
 }
 
@@ -186,6 +179,8 @@ void menu(int id)
     {
         case 0:
             pantalla = 0;
+            MediaPlayer(1);
+            notplaying=true;
             glutPostRedisplay();
             break;
         case 1:
@@ -199,6 +194,13 @@ void menu(int id)
         default:
             break;
     }
+}
+
+void processMenuStatus(int status, int x, int y){
+    if (status == GLUT_MENU_IN_USE)
+        menuselect=true;
+    else
+        menuselect=false;
 }
 
 static void init()
@@ -222,10 +224,12 @@ static void init()
     //glEnable(GL_COLOR_MATERIAL);
     //PlaySound(sdplay,NULL, SND_ASYNC|SND_NOSTOP);
     glutCreateMenu(menu);
-    glutAddMenuEntry("inicio", 0);
-    glutAddMenuEntry("pausa", 1);
-    glutAddMenuEntry("exit", 2);
+    glutAddMenuEntry("Menu Principal", 0);
+    glutAddMenuEntry("Pausa", 1);
+    glutAddMenuEntry("Salir", 2);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+    PlaySound(sdplay,NULL, SND_ASYNC|SND_LOOP);
 }
 
 void draw3dString (void *font, char *s, float x, float y, float z) {
@@ -298,6 +302,33 @@ void drawQuad(){
 	glDisable(GL_TEXTURE_2D);
 }
 
+void drawButton(int number){
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[number]);
+
+    glTranslatef(0, 0, 0);
+    glScalef(.5,.5,.5);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-1.0f, -1.0f, 1.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(1.0f, -1.0f, 1.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(1.0f, 1.0f, 1.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-1.0f, 1.0f, 1.5f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
 void levelOne(){
 
     float tx=-1.2;
@@ -309,10 +340,7 @@ void levelOne(){
         glPushMatrix();
         glTranslatef(tx,.3,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+1)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.4);
@@ -343,10 +371,7 @@ void levelOne(){
         glPushMatrix();
         glTranslatef(tx,-.3,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+6)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.4);
@@ -378,10 +403,7 @@ void levelOne(){
         glTranslatef(tx,-.9,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-15, 1, 0, 0);
-        if ((i+11)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.4);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.4);
@@ -419,10 +441,7 @@ void levelTwo(){
         glPushMatrix();
         glTranslatef(tx,.3,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+1)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.35);
@@ -455,10 +474,7 @@ void levelTwo(){
         glPushMatrix();
         glTranslatef(tx,-.15,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+7)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.35);
@@ -491,10 +507,7 @@ void levelTwo(){
         glPushMatrix();
         glTranslatef(tx,-.6,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+13)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.35);
@@ -528,10 +541,7 @@ void levelTwo(){
         glTranslatef(tx,-1.15,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-15, 1, 0, 0);
-        if ((i+19)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.35);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.35);
@@ -567,10 +577,7 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,.3,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+1)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
@@ -602,10 +609,7 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,-0.1,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+9)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
@@ -638,10 +642,7 @@ void levelThree(){
         glPushMatrix();
         glTranslatef(tx,-0.5,fline);
         glRotatef(angle, 0, 1, 0);
-        if ((i+17)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
@@ -674,10 +675,7 @@ void levelThree(){
         glTranslatef(tx,-0.9,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-10, 1, 0, 0);
-        if ((i+25)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
@@ -709,10 +707,7 @@ void levelThree(){
         glTranslatef(tx,-1.3,fline);
         glRotatef(angle, 0, 1, 0);
         glRotatef(-10, 1, 0, 0);
-        if ((i+33)==cubol)
-            colorCubo(4);
-        else
-            colorCubo(5);
+        colorCubo(5);
         glutSolidCube(0.3);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.3);
@@ -737,6 +732,153 @@ void levelThree(){
     }
 }
 
+void cuboMenu(){
+
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[imgrand1]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    float scaletx = 0.5;
+    glScalef(scaletx,scaletx,scaletx);
+
+    //Frente
+    glBegin(GL_QUADS);
+    glNormal3f( -1.0f, 0.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, 0.5f);
+    glTexCoord2f(6.0f, 0.0f);
+    glVertex3f(-0.5f, 0.5f,  0.5f);
+    glTexCoord2f(6.0f, 1.0f);
+    glVertex3f( 0.5f,  0.5f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.5f, -0.5f,  0.5f);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[imgrand2]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //Atras
+    glBegin(GL_QUADS);
+    glNormal3f( 0.0f, 0.0f, -1.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-0.5f,  0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f( 0.5f,  0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f( 0.5f, -0.5f, -0.5f);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[imgrand3]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//Arriba
+    glBegin(GL_QUADS);
+    glNormal3f( 1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(2.0f, 0.0f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+    glTexCoord2f(2.0f, 2.0f);
+    glVertex3f( 0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 2.0f);
+    glVertex3f( 0.5f, 0.5f, -0.5f);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[imgrand4]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//Abajo
+    glBegin(GL_QUADS);
+    glNormal3f( 0.0f, -1.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+    glTexCoord2f(3.0f, 0.0f);
+    glVertex3f( 0.5f, -0.5f, -0.5f);
+    glTexCoord2f(3.0f, 1.0f);
+    glVertex3f( 0.5f, -0.5f,  0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, -0.5f,  0.5f);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[imgrand5]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//Derecho
+    glBegin(GL_QUADS);
+    glNormal3f( 1.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f);
+    glVertex3f( 0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+    glVertex3f( 0.5f,  0.5f, -0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( 0.5f,  0.5f,  0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( 0.5f, -0.5f,  0.5f);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[imgrand6]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //Izquierdo
+    glBegin(GL_QUADS);
+    glNormal3f(-1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-0.5f, 0.5f, -0.5);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+}
+
+void drawTitle(){
+
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[40]);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTranslatef(0, .2, 0);
+    glScalef(.5,.15,.1);
+
+    glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-1.0f, -1.0f, -1.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(1.0f, -1.0f, -1.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(1.0f, 1.0f, -1.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-1.0f, 1.0f, -1.5f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
 static void display(void)
 {
     if(!pausa){
@@ -747,100 +889,78 @@ static void display(void)
 
 	//Menu principal
     if (pantalla == 0){
+        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[4]);
+
         glPushMatrix();
-        glTranslatef(-0.25,-0.0,0.0);
-        glScaled(0.020, 0.020, 0.020);
-        glColor3f(0.0,0.0,0.0);
-        sprintf(msg,"%s", "LYNX");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.5, 1.0, 0);
+        drawTitle();
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(0.03,-0.3,0.0);
-        glScaled(1.0,0.5,1.0);
-        glutSolidCube(0.3);
+        glTranslatef(0, -.2, -.1);
+        glScalef(.7,.2,.1);
+        drawButton(41);
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(-0.05,-0.3,0.0);
-        glScaled(0.005,0.005,0.005);
-        sprintf(msg,"%s", "Jugar");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.0, -1.0, 0);
+        glTranslatef(-.5, -.5, -.1);
+        glScalef(.7,.2,.1);
+        drawButton(42);
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(0.03,-0.5,0.0);
-        glScaled(1.3,0.5,1.0);
-        glutSolidCube(0.3);
+        glTranslatef(.5, -.5, -.1);
+        glScalef(.7,.2,.1);
+        drawButton(43);
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(-0.095,-0.5,0.0);
-        glScaled(0.005,0.005,0.005);
-        sprintf(msg,"%s", "Controles");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.0, -1.0, 0);
-        glPopMatrix();
-
-        glPushMatrix();
-        glTranslatef(0.03,-0.7,0.0);
-        glScaled(1.0,0.5,1.0);
-        glutSolidCube(0.3);
-        glPopMatrix();
-
-        glPushMatrix();
-        glTranslatef(-0.05,-0.7,0.0);
-        glScaled(0.005,0.005,0.005);
-        sprintf(msg,"%s", "Autores");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.0, -1.0, 0);
+        glTranslatef(0, -.8, -.1);
+        glScalef(.7,.2,.1);
+        drawButton(44);
         glPopMatrix();
     }
 	//Menu Seleccionar nivel
     if (pantalla == 1){
+        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[4]);
+
         glPushMatrix();
-        glTranslatef(-0.25,-0.0,0.0);
-        glScaled(0.01, 0.01, 0.01);
-        glColor3f(0.0,0.0,0.0);
-        sprintf(msg,"%s", "Elige Dificultad");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, 0, 0);
+        drawTitle();
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(0.03,-0.3,0.0);
-        glScaled(1.0,0.5,1.0);
-        glutSolidCube(0.3);
+        glTranslatef(0, -.15, -.1);
+        glScalef(.7,.15,.1);
+        drawButton(45);
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(-0.05,-0.3,0.0);
-        glScaled(0.005,0.005,0.005);
-        sprintf(msg,"%s", "Facil");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.0, -1.0, 0);
+        glTranslatef(-.6, -.5, -.1);
+        glScalef(.5,.2,.1);
+        drawButton(46);
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(0.03,-0.5,0.0);
-        glScaled(1.3,0.5,1.0);
-        glutSolidCube(0.3);
+        glTranslatef(0, -.5, -.1);
+        glScalef(.5,.2,.1);
+        drawButton(47);
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(-0.095,-0.5,0.0);
-        glScaled(0.005,0.005,0.005);
-        sprintf(msg,"%s", "Medio");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.0, -1.0, 0);
+        glTranslatef(.6, -.5, -.1);
+        glScalef(.5,.2,.1);
+        drawButton(48);
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(0.03,-0.7,0.0);
-        glScaled(1.0,0.5,1.0);
-        glutSolidCube(0.3);
+        glTranslatef(-.7, -.9, -.1);
+        glScalef(.4,.2,.1);
+        drawButton(49);
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(-0.05,-0.7,0.0);
-        glScaled(0.005,0.005,0.005);
-        sprintf(msg,"%s", "Dificil");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.0, -1.0, 0);
+        glTranslatef(-.45, -.9, -.1);
+        glScalef(.1,.2,.1);
+        drawButton(50);
         glPopMatrix();
     }
 	//Menu Controles
@@ -865,6 +985,7 @@ static void display(void)
     }
 	//Pantalla Juego
     if (pantalla == 2){
+
         glPushMatrix();
         glTranslatef(0,1.2,-.8);
         glRotatef(20, 1.0, 0.0, 0.0);
@@ -872,19 +993,21 @@ static void display(void)
         glutSolidCube(0.5);
         glColor3f(0.7,0.7,0.7);
         glutWireCube(0.5);
-
         ///////////////
         glPushMatrix();
-        glTranslatef(0.5,0.1,0);
+        glTranslatef(0.6,0.1,0);
         glScaled(0.015, 0.015, 0.015);
         glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[1]);
-        sprintf(msg,"%s%d", "Score: ", score);
+        sprintf(msg,"%s%d", "Puntos: ", score);
         draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
         glPopMatrix();
         glPushMatrix();
         glTranslatef(-1.25,0.1,0.0);
         glScaled(0.015, 0.015, 0.015);
-        sprintf(msg, "%d %s %d", minutos, ":", segundos);
+        if (segundos>=0 && segundos <=9)
+            sprintf(msg, "%s%d%s%d", "0",minutos, ":0", segundos);
+        else
+            sprintf(msg, "%s%d%s%d", "0", minutos, ":", segundos);
         draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
         glPopMatrix();
 
@@ -940,11 +1063,69 @@ static void display(void)
             levelThree();
         }
 
-        sprintf(msg,"%s%d", "Score:", score);
+        /*sprintf(msg,"%s%d", "Score:", score);
         draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -0.9, .7, 0);
 
         sprintf(msg, "%d %s %d", minutos, ":", segundos);
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, .4, .7, 0);
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, .4, .7, 0);*/
+    }
+    //Menu GameOver
+    if (pantalla == 5)
+    {
+        glPushMatrix();
+        glTranslatef(-0.68,0.0,-.1);
+        glScaled(0.020, 0.020, 0.015);
+        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[1]);
+        sprintf(msg,"%s", "Game Over");
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.6,-0.25,-.1);
+        glScaled(0.015, 0.015, 0.015);
+        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[3]);
+        sprintf(msg,"%s%d", "Puntuacion: ", score);
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
+        glPopMatrix();
+
+        glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[4]);
+        glPushMatrix();
+        glTranslatef(-.7, -.9, -.1);
+        glScalef(.4,.2,.1);
+        drawButton(49);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-.45, -.9, -.1);
+        glScalef(.1,.2,.1);
+        drawButton(50);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(.55, -.9, -.1);
+        glScalef(.6,.2,.1);
+        drawButton(51);
+        glPopMatrix();
+    }
+
+    if (pantalla!=2){
+
+        glPushMatrix();
+        glTranslatef(-1.25,1.25,-1);
+        glRotatef(50, 1.0, 0.0, 0.0);
+        glRotatef(angulo, 0.0, 1.0, 0.0);
+        glRotatef(90, 1.0, 0.0, 0.0);
+        cuboMenu();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(1.25,1.25,-1);
+        glRotatef(50, 1.0, 0.0, 0.0);
+        glRotatef(-angulo, 0.0, 1.0, 0.0);
+        glRotatef(90, 1.0, 0.0, 0.0);
+        cuboMenu();
+        glPopMatrix();
+
     }
 
     glutSwapBuffers();//por defaul invoca al glFlush();
@@ -966,7 +1147,54 @@ void swapTimer(int valor){
             swapt++;
 
         if (pantalla == 2) glutTimerFunc(1000,swapTimer,1);
+
+        /*if (pantalla != 2){
+            glPushMatrix();
+            glTranslatef(-1.25,1.25,-1);
+            glRotatef(50, 1.0, 0.0, 0.0);
+            glRotatef(angulo, 0.0, 1.0, 0.0);
+            glRotatef(90, 1.0, 0.0, 0.0);
+            cuboMenu();
+            glPopMatrix();
+        }*/
     }
+}
+
+void imgRandom(int value)
+{
+    if (pantalla !=2 ){
+        imgrand1 += 1;
+        imgrand2 += 2;
+        imgrand3 += 3;
+        imgrand4 += 4;
+        imgrand5 += 5;
+        imgrand6 += 6;
+
+        if (imgrand1 > 40)
+            imgrand1 = 1;
+        if (imgrand2 > 40)
+            imgrand2 = 1;
+        if (imgrand3 > 40)
+            imgrand3 = 1;
+        if (imgrand4 > 40)
+            imgrand4 = 1;
+        if (imgrand5 > 40)
+            imgrand5 = 1;
+        if (imgrand6 > 40)
+            imgrand6 = 1;
+
+        glutPostRedisplay();
+    }
+        glutTimerFunc(1000,imgRandom,0);
+    //}
+}
+
+void movRandom(int value)
+{
+    angulo = angulo +1;
+    if (angulo >360) angulo =0;
+    glutPostRedisplay();
+    glutTimerFunc(20,movRandom,0);
 }
 
 void myTimer( int valor){
@@ -981,6 +1209,16 @@ void myTimer( int valor){
                 segundos = 59;
                 minutos--;
             }
+
+            if (minutos==0 && segundos<=5 && segundos>0){
+                MediaPlayer(4);
+            }
+
+            if (minutos==0 && segundos==0){
+                MediaPlayer(5);
+                pantalla=5;
+            }
+
             glutPostRedisplay();
             }
         }
@@ -1316,69 +1554,87 @@ void myMouse(int button, int state, int x, int y)
     if (y==altura)
         y2=0;
 
-    /*cout << "Posicion x -> ";
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && !pausa){
+
+    cout << "Posicion x -> ";
     cout << x2;
     cout << "\n";
     cout << "Posicion y -> ";
     cout << y2;
-    cout << "\n";*/
-
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && !pausa){
+    cout << "\n";
 
         switch(pantalla){
         case 0:
     {
-        if( x2 >= -.118 &&  x2 <= .175 && y2 <= -.22 && y2 >= -.36)
+        if( x2 >= -.35 &&  x2 <= .35 && y2 <= -.08 && y2 >= -.3)
         {
          pantalla = 1;
          glutPostRedisplay();
         }
-        if( x2 >= -.168 &&  x2 <= 0.218 && y2 <= -.42 && y2 >= -.56)
+        if( x2 >= -.84 &&  x2 <= -0.143 && y2 <= -.38 && y2 >= -.58)
         {
          pantalla = 3;
          glutPostRedisplay();
         }
-        if( x2 >= -.118 &&  x2 <= .178 && y2 <= -.62 && y2 >= -.77)
+        if( x2 >= .1375 &&  x2 <= .834 && y2 <= -.38 && y2 >= -.592)
         {
          pantalla = 4;
          glutPostRedisplay();
+        }
+        if( x2 >= -.347 &&  x2 <= .344 && y2 <= -.67 && y2 >= -.883)
+        {
+            exit(-1);
         }
     }
         break;
         case 1:
     {
-        if( x2 >= -.118 &&  x2 <= .175 && y2 <= -.22 && y2 >= -.36)
+        if( x2 >= -.84 &&  x2 <= -.337 && y2 <= -.38 && y2 >= -.59)
         {
             nivel=1;
-            minutos = 2;
-            segundos = 0;
+            minutos = 1;
+            segundos = 16;
+            limite=15;
             thevector.clear();
             theRandom();
             it=thevector.begin();
+            notplaying=false;
+            MediaPlayer(2);
             pantalla = 2;
             loadGame();
         }
-        if( x2 >= -.168 &&  x2 <= 0.218 && y2 <= -.42 && y2 >= -.56)
+        if( x2 >= -.247 &&  x2 <= 0.244 && y2 <= -.388 && y2 >= -.588)
         {
             nivel=2;
-            minutos = 2;
-            segundos = 0;
+            minutos = 0;
+            segundos = 7;
+            limite=24;
             thevector.clear();
             theRandom();
             it=thevector.begin();
+            notplaying=false;
+            MediaPlayer(2);
             pantalla = 2;
             loadGame();
         }
-        if( x2 >= -.118 &&  x2 <= .178 && y2 <= -.62 && y2 >= -.77)
+        if(x2 >= .334 &&  x2 <= .834 && y2 <= -.383 && y2 >= -.588)
         {
             nivel=3;
-            minutos = 2;
-            segundos = 0;
+            minutos = 1;
+            segundos = 16;
+            limite=40;
             thevector.clear();
             theRandom();
             it=thevector.begin();
+            notplaying=false;
+            MediaPlayer(2);
             pantalla = 2;
             loadGame();
+        }
+        if( x2 >= -.885 &&  x2 <= .385 && y2 <= -.77 && y2 >= -.98)
+        {
+            pantalla = 0;
+            glutPostRedisplay();
         }
     }
         break;
@@ -1395,12 +1651,20 @@ void myMouse(int button, int state, int x, int y)
 
         if (cubol>=1 && cubol<=limite){
             if (cubol == resp){
-                score+=5;
-                PlaySound(sdcorrect,NULL, SND_ASYNC);
+                rescorrect=true;
+                switch (swapt){
+                    case 1: score+=10; break;
+                    case 2: score+=5; break;
+                    case 3: score+=3; break;
+                    case 4: score+=2; break;
+                    default: score+=1; break;
+                }
+
+                MediaPlayer(2);
                 //cout << "!!!!! CORRECTO !!!!!" << endl;
             }
             else{
-                PlaySound(sderror,NULL, SND_ASYNC);
+                MediaPlayer(3);
                 //cout << "XxXxX INCORRECTO XxXxX" << endl;
             }
 
@@ -1412,6 +1676,56 @@ void myMouse(int button, int state, int x, int y)
             glutPostRedisplay();
             //glutTimerFunc(1,swapTimer,0);
         }
+        }
+        break;
+        case 5:
+        {
+            if( x2 >= -.885 &&  x2 <= .385 && y2 <= -.77 && y2 >= -.98){
+                pantalla = 0;
+                MediaPlayer(1);
+                notplaying=true;
+                glutPostRedisplay();
+            }
+            if(x2 >= .244 &&  x2 <= .829 && y2 <= -.775 && y2 >= -.98){
+                switch (nivel){
+                    case 1:{
+                        minutos = 1;
+                        segundos = 16;
+                        limite=15;
+                        thevector.clear();
+                        theRandom();
+                        it=thevector.begin();
+                        notplaying=false;
+                        MediaPlayer(2);
+                        pantalla = 2;
+                        loadGame();
+                    } break;
+                    case 2:{
+                        minutos = 1;
+                        segundos = 16;
+                        limite=24;
+                        thevector.clear();
+                        theRandom();
+                        it=thevector.begin();
+                        notplaying=false;
+                        MediaPlayer(2);
+                        pantalla = 2;
+                        loadGame();
+                    } break;
+                    case 3:{
+                        minutos = 1;
+                        segundos = 16;
+                        limite=40;
+                        thevector.clear();
+                        theRandom();
+                        it=thevector.begin();
+                        notplaying=false;
+                        MediaPlayer(2);
+                        pantalla = 2;
+                        loadGame();
+                    } break;
+                }
+            }
         }
         break;
         default:
@@ -1443,12 +1757,13 @@ int main(int argc, char *argv[])
     init();
     initRendering();
     initRandom();
-    //initLevel1();
     glutDisplayFunc(display);
     glutKeyboardFunc(myKeyboard);
-    //glutTimerFunc(1000,myTimer,1);
+    glutTimerFunc(20,movRandom,1);
+    glutTimerFunc(1000,imgRandom,1);
     glutReshapeFunc(reshape);
     glutMouseFunc(myMouse);
+    glutMenuStatusFunc(processMenuStatus);
     glutSpecialFunc(specialKeys);
     glutMainLoop();
     return EXIT_SUCCESS;
