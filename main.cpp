@@ -94,6 +94,7 @@ GLfloat mat_diffuse[][5] = {{0.0f, 0.0f, 0.0f, 1.0f},
 GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
 
 void MediaPlayer (int x){
+
     switch (x) {
         case 1:{
             if (notplaying!=true)
@@ -148,7 +149,7 @@ GLuint _textureId;
 
 void initRendering() {
     GLuint i=0;
-    glGenTextures(55, texName);
+    glGenTextures(62, texName);
     Image* image;
 
     for (int n=1; n<=limite; n++){
@@ -169,6 +170,15 @@ void initRendering() {
     image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/backw.bmp");loadTexture(image,i++);
     image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/back.bmp");loadTexture(image,i++);
     image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/restart.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/mouse.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/mouseizq.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/mouseder.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/inst1.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/inst2.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/inst3.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/nombre1.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/nombre2.bmp");loadTexture(image,i++);
+    image = loadBMP("/Users/Diego/Documents/CodeBlocks/ProjectLYNX/texturas/background.bmp");loadTexture(image,i++);
 
 	delete image;
 }
@@ -226,6 +236,7 @@ static void init()
     glutCreateMenu(menu);
     glutAddMenuEntry("Menu Principal", 0);
     glutAddMenuEntry("Pausa", 1);
+    glutAddMenuEntry("Mute", 3);
     glutAddMenuEntry("Salir", 2);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 
@@ -315,7 +326,7 @@ void drawButton(int number){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
+	glNormal3f(1.0f, 0.0f, 0.0f);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 1.5f);
 	glTexCoord2f(1.0f, 0.0f);
@@ -424,11 +435,6 @@ void levelOne(){
         else
             fline+=.075;
     }
-
-    //cout << "El cubo -> ";
-    //cout << resp;
-    //cout << *it;
-    //cout << "\n";
 }
 
 void levelTwo(){
@@ -879,6 +885,33 @@ void drawTitle(){
 	glDisable(GL_TEXTURE_2D);
 }
 
+void paintBackgroud(){
+    glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texName[60]);
+
+    glTranslatef(0, 0, 0);
+    glScalef(.5,.5,.5);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBegin(GL_QUADS);
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-10.0f, -10.0f, -5.5f);
+	glTexCoord2f(0.0f, 10.0f);
+	glVertex3f(10.0f, -10.0f, -5.5f);
+	glTexCoord2f(10.0f, 10.0f);
+	glVertex3f(10.0f, 10.0f, -5.5f);
+	glTexCoord2f(10.0f, 0.0f);
+	glVertex3f(-10.0f, 10.0f, -5.5f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
 static void display(void)
 {
     if(!pausa){
@@ -898,26 +931,32 @@ static void display(void)
         glPushMatrix();
         glTranslatef(0, -.2, -.1);
         glScalef(.7,.2,.1);
+        colorCubo(3);
         drawButton(41);
         glPopMatrix();
 
         glPushMatrix();
         glTranslatef(-.5, -.5, -.1);
         glScalef(.7,.2,.1);
+        colorCubo(5);
         drawButton(42);
         glPopMatrix();
 
         glPushMatrix();
         glTranslatef(.5, -.5, -.1);
         glScalef(.7,.2,.1);
+        colorCubo(5);
         drawButton(43);
         glPopMatrix();
 
         glPushMatrix();
         glTranslatef(0, -.8, -.1);
         glScalef(.7,.2,.1);
+        colorCubo(1);
         drawButton(44);
         glPopMatrix();
+
+        colorCubo(4);
     }
 	//Menu Seleccionar nivel
     if (pantalla == 1){
@@ -930,58 +969,159 @@ static void display(void)
         glPushMatrix();
         glTranslatef(0, -.15, -.1);
         glScalef(.7,.15,.1);
+        colorCubo(5);
         drawButton(45);
         glPopMatrix();
 
         glPushMatrix();
         glTranslatef(-.6, -.5, -.1);
         glScalef(.5,.2,.1);
+        colorCubo(3);
         drawButton(46);
         glPopMatrix();
 
         glPushMatrix();
         glTranslatef(0, -.5, -.1);
         glScalef(.5,.2,.1);
+        colorCubo(3);
         drawButton(47);
         glPopMatrix();
 
         glPushMatrix();
         glTranslatef(.6, -.5, -.1);
         glScalef(.5,.2,.1);
+        colorCubo(3);
         drawButton(48);
         glPopMatrix();
 
         glPushMatrix();
         glTranslatef(-.7, -.9, -.1);
         glScalef(.4,.2,.1);
+        colorCubo(4);
         drawButton(49);
         glPopMatrix();
 
         glPushMatrix();
         glTranslatef(-.45, -.9, -.1);
         glScalef(.1,.2,.1);
+        colorCubo(4);
         drawButton(50);
         glPopMatrix();
+
+        colorCubo(4);
     }
 	//Menu Controles
     if (pantalla == 3)
     {
         glPushMatrix();
-        glTranslatef(-0.05,-0.7,0.0);
-        glScaled(0.005,0.005,0.005);
-        sprintf(msg,"%s", "muerete");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.0, -1.0, 0);
+        glTranslatef(-.6, -.4, -.1);
+        glScalef(.6,.6,.1);
+        colorCubo(6);
+        drawButton(55);
         glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(0, -.4, -.1);
+        glScalef(.6,.6,.1);
+        colorCubo(6);
+        drawButton(56);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(.6, -.4, -.1);
+        glScalef(.6,.6,.1);
+        colorCubo(6);
+        drawButton(57);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-.6, .1, -.1);
+        glScalef(.6,.6,.1);
+        colorCubo(6);
+        drawButton(52);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(0,.1, -.1);
+        glScalef(.6,.6,.1);
+        colorCubo(6);
+        drawButton(53);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(.6, .1, -.1);
+        glScalef(.6,.6,.1);
+        colorCubo(6);
+        drawButton(54);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-.7, -.9, -.1);
+        glScalef(.4,.2,.1);
+        colorCubo(4);
+        drawButton(49);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-.45, -.9, -.1);
+        glScalef(.1,.2,.1);
+        colorCubo(4);
+        drawButton(50);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.375,0.7,-.1);
+        glScaled(0.015, 0.015, 0.0);
+        colorCubo(3);
+        sprintf(msg,"%s", "Controles");
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
+        glPopMatrix();
+
+        colorCubo(4);
     }
 	//Menu Creditos
     if (pantalla == 4)
     {
+
         glPushMatrix();
-        glTranslatef(-0.05,-0.7,0.0);
-        glScaled(0.005,0.005,0.005);
-        sprintf(msg,"%s", "maria la del barrio");
-        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1.0, -1.0, 0);
+        glTranslatef(-.2, .1, -.1);
+        glScalef(1.75,.4,.1);
+        colorCubo(2);
+        drawButton(58);
         glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(0.4, -.3, -.1);
+        glScalef(1.75,.4,.1);
+        colorCubo(3);
+        drawButton(59);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.75,-0.7,-.1);
+        glScaled(0.007, 0.007, 0.0);
+        colorCubo(5);
+        sprintf(msg,"%s", "Curso - Graficas Computacionales");
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.75,-0.9,-.1);
+        glScaled(0.007, 0.007, 0.0);
+        colorCubo(5);
+        sprintf(msg,"%s", "Musica de TLOZ: Wand Of Gamelon");
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.35,0.7,-.1);
+        glScaled(0.015, 0.015, 0.0);
+        colorCubo(1);
+        sprintf(msg,"%s", "Creditos");
+        draw3dString(GLUT_STROKE_MONO_ROMAN, msg, -1, -.9, 0);
+        glPopMatrix();
+
+        colorCubo(4);
     }
 	//Pantalla Juego
     if (pantalla == 2){
@@ -1024,7 +1164,7 @@ static void display(void)
             }
             flagtextmaster = 0;
         }
-        //cout << "El master -> " << textmaster << endl;
+
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texName[textmaster]);
 
@@ -1081,7 +1221,7 @@ static void display(void)
         glPopMatrix();
 
         glPushMatrix();
-        glTranslatef(-0.6,-0.25,-.1);
+        glTranslatef(-0.7,-0.25,-.1);
         glScaled(0.015, 0.015, 0.015);
         glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_diffuse[3]);
         sprintf(msg,"%s%d", "Puntuacion: ", score);
@@ -1128,6 +1268,11 @@ static void display(void)
 
     }
 
+    glPushMatrix();
+    colorCubo(6);
+    paintBackgroud();
+    glPopMatrix();
+
     glutSwapBuffers();//por defaul invoca al glFlush();
     }
 }
@@ -1148,15 +1293,6 @@ void swapTimer(int valor){
 
         if (pantalla == 2) glutTimerFunc(1000,swapTimer,1);
 
-        /*if (pantalla != 2){
-            glPushMatrix();
-            glTranslatef(-1.25,1.25,-1);
-            glRotatef(50, 1.0, 0.0, 0.0);
-            glRotatef(angulo, 0.0, 1.0, 0.0);
-            glRotatef(90, 1.0, 0.0, 0.0);
-            cuboMenu();
-            glPopMatrix();
-        }*/
     }
 }
 
@@ -1263,31 +1399,31 @@ void myKeyboard(unsigned char theKey, int mouseX, int mouseY)
 
             break;
         case 49:
-            nivel=1;
+            /*nivel=1;
             minutos = 2;
             segundos = 0;
             thevector.clear();
             theRandom();
             it=thevector.begin();
-            glutPostRedisplay();
+            glutPostRedisplay();*/
             break;
         case 50:
-            nivel=2;
+            /*nivel=2;
             minutos = 2;
             segundos = 0;
             thevector.clear();
             theRandom();
             it=thevector.begin();
-            glutPostRedisplay();
+            glutPostRedisplay();*/
             break;
         case 51:
-            nivel=3;
+            /*nivel=3;
             minutos = 2;
             segundos = 0;
             thevector.clear();
             theRandom();
             it=thevector.begin();
-            glutPostRedisplay();
+            glutPostRedisplay();*/
             break;
         case 52:
 
@@ -1329,12 +1465,6 @@ void specialKeys(int key, int x, int y){
 }
 
 int clicCuboL1(float x, float y){
-    /*cout << "Posicion x -> ";
-    cout << x;
-    cout << "\n";
-    cout << "Posicion y -> ";
-    cout << y;
-    cout << "\n";*/
 
     if (y>0 && y<0.3){
         if (x>-.9 && x<-.5)
@@ -1430,12 +1560,6 @@ int clicCuboL2(float x, float y){
 }
 
 int clicCuboL3(float x, float y){
-    /*cout << "Posicion x -> ";
-    cout << x;
-    cout << "\n";
-    cout << "Posicion y -> ";
-    cout << y;
-    cout << "\n";*/
 
     if (y>0.05 && y<0.3){
         if (x>-.94 && x<-.68)
@@ -1556,13 +1680,6 @@ void myMouse(int button, int state, int x, int y)
 
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && !pausa){
 
-    cout << "Posicion x -> ";
-    cout << x2;
-    cout << "\n";
-    cout << "Posicion y -> ";
-    cout << y2;
-    cout << "\n";
-
         switch(pantalla){
         case 0:
     {
@@ -1606,8 +1723,8 @@ void myMouse(int button, int state, int x, int y)
         if( x2 >= -.247 &&  x2 <= 0.244 && y2 <= -.388 && y2 >= -.588)
         {
             nivel=2;
-            minutos = 0;
-            segundos = 7;
+            minutos = 1;
+            segundos = 16;
             limite=24;
             thevector.clear();
             theRandom();
@@ -1645,9 +1762,6 @@ void myMouse(int button, int state, int x, int y)
             case 2: cubol = clicCuboL2(x2, y2); break;
             case 3: cubol = clicCuboL3(x2, y2); break;
         }
-        //cout << "El cubo2 -> ";
-        //cout << cubol1;
-        //cout << "\n";
 
         if (cubol>=1 && cubol<=limite){
             if (cubol == resp){
@@ -1676,6 +1790,15 @@ void myMouse(int button, int state, int x, int y)
             glutPostRedisplay();
             //glutTimerFunc(1,swapTimer,0);
         }
+        }
+        break;
+        case 3:
+        {
+            if( x2 >= -.885 &&  x2 <= .385 && y2 <= -.77 && y2 >= -.98)
+            {
+                pantalla = 0;
+                glutPostRedisplay();
+            }
         }
         break;
         case 5:
@@ -1739,6 +1862,7 @@ void myMouse(int button, int state, int x, int y)
 
 void loadGame(){
     if(pantalla == 2){
+        score = 0;
         swapt = 0;
         glutTimerFunc(10,swapTimer,0);
         glutTimerFunc(10,myTimer,1);
